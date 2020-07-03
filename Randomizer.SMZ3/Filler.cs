@@ -49,10 +49,10 @@ namespace Randomizer.SMZ3 {
             var junkItems = Worlds.SelectMany(world => Item.CreateJunkPool(world)).Shuffle(Rnd);
 
             var locations = Worlds.SelectMany(x => x.Locations).Empty().Shuffle(Rnd);
-            if (Config.GameMode != GameMode.Multiworld)
+            if (Config.SingleWorld)
                 locations = ApplyLocationWeighting(locations).ToList();
             
-            if (Config.GameMode == GameMode.Multiworld) {
+            if (Config.MultiWorld) {
                 /* Place moonpearls and morphs in last 40%/20% of the pool so that
                  * they will tend to place in earlier locations.
                  */
@@ -66,7 +66,6 @@ namespace Randomizer.SMZ3 {
             AssumedFill(progressionItems, baseItems, locations, Worlds);
             FastFill(niceItems, locations);
             FastFill(junkItems, locations);
-
         }
 
         void ApplyItemBias(List<Item> itemPool, IEnumerable<(ItemType type, double weight)> reorder) {
@@ -132,7 +131,7 @@ namespace Randomizer.SMZ3 {
                 }
 
                 location.Item = item;
-                itemPool.Remove(item);                
+                itemPool.Remove(item);
             }
         }
 
